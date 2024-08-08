@@ -1,10 +1,10 @@
 /**
  * @file cs241.h
- * @brief Main header file for cs241 library.
+ * @brief Main header file for CS241 library.
+ * @author Mei-Hui Su - SCEC <mei@usc.edu>
  * @version 1.0
  *
- * Delivers the cs241 model 
- * base on original cs241
+ * Delivers the CS241 model
  *
  */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <math.h>
 
+#include "etree.h"
 #include "proj.h"
 
 // Constants
@@ -63,6 +64,8 @@ typedef struct cs241_configuration_t {
 	int utm_zone;
 	/** The model directory */
 	char model_dir[128];
+        /** GTL on or off (1 or 0) */
+        int gtl;
 	/** Number of x points */
 	int nx;
 	/** Number of y points */
@@ -89,13 +92,56 @@ typedef struct cs241_configuration_t {
 	double bottom_right_corner_n;
 	/** Z interval for the data */
 	double depth_interval;
-        /** The data access seek method, fast-X, or fast-Y */
-        char seek_axis[128];
-        /** The data seek direction, bottom-up, or top-down */
-        char seek_direction[128];
-        /** trilinear interploation; */
-        int interpolation;
+        /** Brocher 2005 scaling polynomial coefficient 10^0 */
+        double p0;
+        /** Brocher 2005 scaling polynomial coefficient 10^1 */
+        double p1;
+        /** Brocher 2005 scaling polynomial coefficient 10^2 */
+        double p2;
+        /** Brocher 2005 scaling polynomial coefficient 10^3 */
+        double p3;
+        /** Brocher 2005 scaling polynomial coefficient 10^4 */
+        double p4;
+        /** Brocher 2005 scaling polynomial coefficient 10^5 */
+        double p5;
 } cs241_configuration_t;
+
+/** The configuration structure for the Vs30 map. */
+typedef struct cs241_vs30_map_config_t {
+	/** Pointer to the e-tree file */
+	etree_t *vs30_map;
+	/** The type of map */
+	char type[20];
+	/** A description of the map */
+	char description[50];
+	/** The map's author */
+	char author[30];
+	/** The date the map was created */
+	char date[10];
+	/** The spacing in meters */
+	double spacing;
+	/** The map's schema */
+	char schema[50];
+	/** The projection string in Proj.4 format */
+	char projection[128];
+	/** The origin point */
+	cs241_point_t origin_point;
+	/** The number of degrees the map was rotated around origin */
+	double rotation;
+	/** The X dimension of the map */
+	double x_dimension;
+	/** The Y dimension of the map */
+	double y_dimension;
+	/** The Z dimension of the map */
+	double z_dimension;
+	/** Number of e-tree ticks in the X direction */
+	int x_ticks;
+	/** Number of e-tree ticks in the Y direction */
+	int y_ticks;
+	/** Number of e-tree ticks in the Z direction */
+	int z_ticks;
+} cs241_vs30_map_config_t;
+
 
 /** The model structure which points to available portions of the model. */
 typedef struct cs241_model_t {
@@ -121,7 +167,57 @@ typedef struct cs241_model_t {
 	int qs_status;
 } cs241_model_t;
 
+/** Contains the Vs30 and surface values from the UCVM map. */
+typedef struct cs241_vs30_mpayload_t {
+        /** Surface height in meters */
+        float surf;
+        /** Vs30 data from Wills and Wald */
+        float vs30;
+} cs241_vs30_mpayload_t;
+
+// Constants
+/** The version of the model. */
+const char *cs241_version_string = "CS241";
+
+// Variables
+/** Set to 1 when the model is ready for query. */
+int cs241_is_initialized = 0;
+
+/** Location of the ucvm.e e-tree file. */
+char cs241_vs30_etree_file[128];
+/** Location of En-Jui's latest iteration files. */
+char cs241_iteration_directory[128];
+
+/** Configuration parameters. */
+cs241_configuration_t *cs241_configuration;
+
+/** Holds the configuration parameters for the Vs30 map. */
+cs241_vs30_map_config_t *cs241_vs30_map;
+
+/** Holds pointers to the velocity model data OR indicates it can be read from file. */
+cs241_model_t *cs241_velocity_model;
+
+/** Proj coordinate transformation objects. */
+PJ *cs241_geo2utm = NULL;
+PJ *cs241_geo2aeqd = NULL;
+
+/** The cosine of the rotation angle used to rotate the box and point around the bottom-left corner. */
+double cs241_cos_rotation_angle = 0;
+/** The sine of the rotation angle used to rotate the box and point around the bottom-left corner. */
+double cs241_sin_rotation_angle = 0;
+
+/** The height of this model's region, in meters. */
+double cs241_total_height_m = 0;
+/** The width of this model's region, in meters. */
+double cs241_total_width_m = 0;
+
+/** The cosine of the Vs30 map's rotation. */
+double cs241_cos_vs30_rotation_angle = 0;
+/** The sine of the Vs30 map's rotation. */
+double cs241_sin_vs30_rotation_angle = 0;
+
 // UCVM API Required Functions
+
 #ifdef DYNAMIC_LIBRARY
 
 /** Initializes the model */
@@ -132,18 +228,15 @@ int model_finalize();
 int model_version(char *ver, int len);
 /** Queries the model */
 int model_query(cs241_point_t *points, cs241_properties_t *data, int numpts);
-int model_config(char **config, int *sz);
 
 int (*get_model_init())(const char *, const char *);
 int (*get_model_query())(cs241_point_t *, cs241_properties_t *, int);
 int (*get_model_finalize())();
 int (*get_model_version())(char *, int);
-int (*get_model_config())(char **, int*);
 
 #endif
 
-// cs241 Related Functions
-
+// CS241 Related Functions
 /** Initializes the model */
 int cs241_init(const char *dir, const char *label);
 /** Cleans up the model (frees memory, etc.) */
@@ -156,13 +249,22 @@ int cs241_query(cs241_point_t *points, cs241_properties_t *data, int numpts);
 // Non-UCVM Helper Functions
 /** Reads the configuration file. */
 int cs241_read_configuration(char *file, cs241_configuration_t *config);
-int cs241_dump_configuration(cs241_configuration_t *config);
 /** Prints out the error string. */
 void cs241_print_error(char *err);
 /** Retrieves the value at a specified grid point in the model. */
 void cs241_read_properties(int x, int y, int z, cs241_properties_t *data);
 /** Attempts to malloc the model size in memory and read it in. */
 int cs241_try_reading_model(cs241_model_t *model);
+/** Calculates density from Vs. */
+double cs241_calculate_density(double vs);
+
+// GTL related
+/** Retrieves the vs30 value for a given point. */
+int cs241_get_vs30_based_gtl(cs241_point_t *point, cs241_properties_t *data);
+/** Reads the specified Vs30 map from UCVM. */
+int cs241_read_vs30_map(char *filename, cs241_vs30_map_config_t *map);
+/** Gets the Vs30 value at a point */
+double cs241_get_vs30_value(double longitude, double latitude, cs241_vs30_map_config_t *map);
 
 // Interpolation Functions
 /** Linearly interpolates two cs241_properties_t structures */
