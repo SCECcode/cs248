@@ -79,17 +79,20 @@ def main():
 
     subprocess.check_call(["mkdir", "-p", mdir])
 
-    fname=mdir+"/density.dat"
+    fname=mdir+"/density.tar.gz"
     url = path + "/" + fname
     download_urlfile(url,fname)
+    subprocess.check_call(["tar", "-zxvf", fname])
 
-    fname=mdir+"/vp.dat"
+    fname=mdir+"/vp.tar.gz"
     url = path + "/" + fname
     download_urlfile(url,fname)
+    subprocess.check_call(["tar", "-zxvf", fname])
 
-    fname=mdir+"/vs.dat"
+    fname=mdir+"/vs.tar.gz"
     url = path + "/" + fname
     download_urlfile(url,fname)
+    subprocess.check_call(["tar", "-zxvf", fname])
 
     print("\nDone!")
 
