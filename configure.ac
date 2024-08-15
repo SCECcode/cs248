@@ -201,6 +201,7 @@ AC_CONFIG_FILES([
   Makefile
   src/Makefile
   data/Makefile
+  tests/Makefile
   ])
 
 AC_OUTPUT

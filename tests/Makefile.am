@@ -1,15 +1,17 @@
 # Autoconf/automake file
 
-#bin_PROGRAMS = test_cs241
+bin_PROGRAMS =
 
 # General compiler/linker flags
-#AM_CFLAGS = ${CFLAGS}
-#AM_LDFLAGS = ${LDFLAGS}
+AM_CFLAGS = ${CFLAGS} ${ETREE_INCLUDES} ${PROJ_INCLUDES}
+AM_LDFLAGS = ${LDFLAGS} ${ETREE_LDFLAGS} ${PROJ_LDFLAGS}
 
 #objects = test.o
 #TARGETS = $(bin_PROGRAMS)
 
-#all: $(bin_PROGRAMS)
+all: $(bin_PROGRAMS)
+
+clean:
 
 #install:
 #	mkdir -p ${prefix}/tests

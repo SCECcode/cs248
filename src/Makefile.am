@@ -1,9 +1,9 @@
 # Autoconf/automake file
 
 # General compiler/linker flags
-AM_CFLAGS = ${CFLAGS}
-AM_FCFLAGS = ${FCFLAGS}
-AM_LDFLAGS = ${LDFLAGS}
+AM_CFLAGS = ${CFLAGS} ${ETREE_INCLUDES} ${PROJ_INCLUDES}
+AM_LDFLAGS = ${LDFLAGS} ${ETREE_LDFLAGS} ${PROJ_LDFLAGS}
+
 
 TARGETS = libcs241.a libcs241.so
 
