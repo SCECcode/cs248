@@ -6,9 +6,9 @@ AM_FCFLAGS = ${FCFLAGS}
 AM_LDFLAGS = ${LDFLAGS}
 
 all:
-DENSITY_FILE=cs241/density.dat
-VS_FILE=cs241/vs.dat
-VP_FILE=cs241/vp.dat
+DENSITY_FILE=cs248/density.dat
+VS_FILE=cs248/vs.dat
+VP_FILE=cs248/vp.dat
 	if [ ! -f "$(DENSITY_FILE)" ]; then \
 		./make_data_files.py; \
         fi 
@@ -16,4 +16,4 @@ VP_FILE=cs241/vp.dat
 install:
 	mkdir -p ${prefix}/data
 	cp ./config ${prefix}/data
-	cp -R ./cs241 ${prefix}/data
+	cp -R ./cs248 ${prefix}/data

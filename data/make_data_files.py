@@ -14,7 +14,7 @@ if sys.version_info.major >= (3) :
 else:
   from urllib2 import urlopen
 
-model = "CS241"
+model = "CS248"
 
 def usage():
     print("\n./make_data_files.py\n\n")

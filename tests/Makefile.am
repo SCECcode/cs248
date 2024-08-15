@@ -15,10 +15,10 @@ clean:
 
 #install:
 #	mkdir -p ${prefix}/tests
-#	cp test_cs241 ${prefix}/tests
+#	cp test_cs248 ${prefix}/tests
 
-#test_cs241: $(objects)
-#	$(CC) -o $@ $^ $(AM_CFLAGS) -L../src -lcs241 $(AM_LDFLAGS)
+#test_cs248: $(objects)
+#	$(CC) -o $@ $^ $(AM_CFLAGS) -L../src -lcs248 $(AM_LDFLAGS)
 
 #$(objects): %.o: %.c
 #	$(CC) -o $@ -c $^ $(AM_CFLAGS) -I../src/ $(AM_CFLAGS)
