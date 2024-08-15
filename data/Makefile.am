@@ -9,7 +9,7 @@ all:
 DENSITY_FILE=cs241/density.dat
 VS_FILE=cs241/vs.dat
 VP_FILE=cs241/vp.dat
-	if [ ! -f "$(DENSITY_DATA)" ]; then \
+	if [ ! -f "$(DENSITY_FILE)" ]; then \
 		./make_data_files.py; \
         fi 
 
