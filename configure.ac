@@ -91,7 +91,6 @@ dnl Command line tools
 dnl
 
 AC_PROG_CC
-AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
