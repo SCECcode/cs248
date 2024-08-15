@@ -1,4 +1,4 @@
-CS241 README
+CS248 README
 Spring 2024
 
 1) Installation
@@ -11,11 +11,11 @@ capabilities, are already in there.
 
 2) Library
 
-The library ./lib/libcs241.a may be statically linked into any
+The library ./lib/libcs248.a may be statically linked into any
 user application. Also, if your system supports dynamic linking,
-you will also have a ./lib/libcs241.so file that can be used
+you will also have a ./lib/libcs248.so file that can be used
 for dynamic linking. The header file defining the API is located
-in ./include/cs241.h.
+in ./include/cs248.h.
 
 3) Contact the authors
 
