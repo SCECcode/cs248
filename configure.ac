@@ -3,7 +3,6 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
 AC_INIT(CS241, 1.1.0, software@scec.org)
-AC_CONFIG_AUX_DIR([./aux-config])
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE(foreign tar-pax)
 
