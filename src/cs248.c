@@ -122,7 +122,7 @@ int cs248_init(const char *dir, const char *label) {
           pow(cs248_configuration->top_right_corner_e - cs248_configuration->top_left_corner_e, 2.0f));
 
     if(cs248_debug) {
-      fprintf(stderr,"height %lf width %lf\n", north_height_m, east_width_m);
+      fprintf(stderr,"north_height %lf east_width %lf\n", north_height_m, east_width_m);
       fprintf(stderr,"totol height %lf total width %lf\n", cs248_total_height_m, cs248_total_width_m);
       fprintf(stderr,"cos angle %lf sin angle %lf\n", cs248_cos_rotation_angle, cs248_sin_rotation_angle);
     }
@@ -326,6 +326,7 @@ if(cs248_debug) { fprintf(stderr,"load_x_coord %d load_y_coord %d load_z_coord %
               cs248_trilinear_interpolation(x_percent, y_percent, z_percent, surrounding_points, &(data[i]));
           }
           } else {
+if(cs248_debug) {fprintf(stderr,"direct call, no interpolation\n"); }
               cs248_read_properties(load_x_coord, load_y_coord, load_z_coord, &(data[i]));    // Orgin.
         }
 
@@ -374,7 +375,7 @@ if(cs248_debug) {fprintf(stderr,"LOCATION==%d(fast-y, not bottom-up)\n", locatio
             }
         } else {  // fast-X, cca data
             if ( strcmp(cs248_configuration->seek_axis, "fast-x") == 0 ||
-                     strcmp(cs248_configuration->seek_axis, "fast-X") == 0 ) { // fast-y,  cs248 
+                     strcmp(cs248_configuration->seek_axis, "fast-X") == 0 ) { // fast-x,  cs248 
                 if(strcmp(cs248_configuration->seek_direction, "bottom-up") == 0) { 
                     location = ((long)z * cs248_configuration->nx * cs248_configuration->ny) + (y * cs248_configuration->nx) + x;
 if(cs248_debug) {fprintf(stderr,"LOCATION==%d(fast-x, bottom-up)\n", location); }
@@ -394,9 +395,10 @@ if(cs248_debug) {fprintf(stderr,"LOCATION==%d(fast-x, not bottom-up)\n", locatio
         // Read from file.
         fp = (FILE *)cs248_velocity_model->vs;
         fseek(fp, location * sizeof(float), SEEK_SET);
-                float temp;
+        float temp;
         fread(&(temp), sizeof(float), 1, fp);
-                data->vs = temp;
+        data->vs = temp;
+if(cs248_debug) {fprintf(stderr,"     FOUND : vs %f\n", temp); }
     }
 
     // Check our loaded components of the model.
@@ -408,9 +410,10 @@ if(cs248_debug) {fprintf(stderr,"LOCATION==%d(fast-x, not bottom-up)\n", locatio
         // Read from file.
         fp = (FILE *)cs248_velocity_model->vp;
         fseek(fp, location * sizeof(float), SEEK_SET);
-                float temp;
+        float temp;
         fread(&(temp), sizeof(float), 1, fp);
-                data->vp=temp;
+if(cs248_debug) {fprintf(stderr,"     FOUND : vp %f\n", temp); }
+        data->vp=temp;
     }
 
     // Check our loaded components of the model.
@@ -422,9 +425,10 @@ if(cs248_debug) {fprintf(stderr,"LOCATION==%d(fast-x, not bottom-up)\n", locatio
         // Read from file.
         fp = (FILE *)cs248_velocity_model->rho;
         fseek(fp, location * sizeof(float), SEEK_SET);
-                float temp;
+        float temp;
         fread(&(temp), sizeof(float), 1, fp);
-                data->rho=temp;
+if(cs248_debug) {fprintf(stderr,"     FOUND : density %f\n", temp); }
+        data->rho=temp;
     }
 }
 
@@ -697,7 +701,7 @@ int cs248_try_reading_model(cs248_model_t *model) {
         file_count++;
     }
 
-    sprintf(current_file, "%s/rho.dat", cs248_data_directory);
+    sprintf(current_file, "%s/density.dat", cs248_data_directory);
     if (access(current_file, R_OK) == 0) {
                 if(!too_big() ) { // only if fit
             model->rho = malloc(base_malloc);
