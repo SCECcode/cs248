@@ -5,8 +5,8 @@ utm_zone = 10
 model_dir = cs248
 model_data_path  = https://g-c662a6.a78b8.36fe.data.globus.org/ucvm/models
 
-# GTL on or off?
-gtl = off 
+# interpolation on or off?
+interpolation = off 
 
 # Number of cells in x, y, and z.
 # each file should be 5760*9680*632*4 = 140953190400 bytes.
@@ -15,31 +15,18 @@ ny = 9680
 nz = 632 
 
 # Depth, in meters
-depth = 51040
+depth = 50560
 depth_interval = 80
-
-# Density scaling parameters
-p5 = -0.0024189659303912917
-p4 = 0.015600987888334450
-p3 = 0.051962399479341816
-p2 = -0.51231936640441489
-p1 = 1.2550758337054457
-p0 = 1.2948318548300342
-
-# Calculate Density using vs or vp ?
-density = vs
 
 # -126.18649     39.75063
 # -121.85281     42.27791
 # -116.72395     36.56162
 # -120.90294     34.22243
-
 #top_left, lon(-126.186490)lat(39.750630) => utm_e(227087.835339),utm_n(4404738.435924)
 #top_right, lon(-121.852810)lat(42.277910) => utm_e(594688.190375),utm_n(4681072.429441)
 #bottom_right, lon(-116.723950)lat(36.561620) => utm_e(1062028.003413),utm_n(4064428.002131)
 #bottom_left, lon(-120.902940)lat(34.222430) => utm_e(693266.275355),utm_n(3788615.162735)
 
- 
 bottom_left_corner_e = 693266.27535
 bottom_left_corner_n = 3788615.162735
 top_left_corner_e    = 227087.835339
