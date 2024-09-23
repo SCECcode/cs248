@@ -16,4 +16,7 @@ VP_FILE=cs248/vp.dat
 install:
 	mkdir -p ${prefix}/data
 	cp ./config ${prefix}/data
-	cp -R ./cs248 ${prefix}/data
+	if [ ! -d ${prefix}/data/cs248 ]; then \
+		mv cs248 ${prefix}/data \
+		ln -s ${prefix}/data/cs248 . \
+        fi 
