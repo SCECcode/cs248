@@ -17,6 +17,6 @@ install:
 	mkdir -p ${prefix}/data
 	cp ./config ${prefix}/data
 	if [ ! -d ${prefix}/data/cs248 ]; then \
-		mv cs248 ${prefix}/data \
-		ln -s ${prefix}/data/cs248 . \
+		mv cs248 ${prefix}/data; \
+		ln -s ${prefix}/data/cs248 .; \
         fi 
