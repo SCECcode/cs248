@@ -12,11 +12,14 @@ VP_FILE=cs248/vp.dat
 	if [ ! -f "$(DENSITY_FILE)" ]; then \
 		./make_data_files.py; \
         fi 
+	if [ ! -f "$(VS_FILE)" ]; then \
+		./make_data_files.py; \
+        fi 
+	if [ ! -f "$(VP_FILE)" ]; then \
+		./make_data_files.py; \
+        fi 
 
 install:
 	mkdir -p ${prefix}/data
 	cp ./config ${prefix}/data
-	if [ ! -d ${prefix}/data/cs248 ]; then \
-		mv cs248 ${prefix}/data; \
-		ln -s ${prefix}/data/cs248 .; \
-        fi 
+	cp -R ./cs248 ${prefix}/data
