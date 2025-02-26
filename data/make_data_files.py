@@ -8,6 +8,7 @@
 import getopt
 import sys
 import subprocess
+import os
 
 if sys.version_info.major >= (3) :
   from urllib.request import urlopen
@@ -77,22 +78,43 @@ def main():
     print("\nDownloading model dataset\n")
 
 
-    subprocess.check_call(["mkdir", "-p", mdir])
+#check if cvm-large-dataset/cs248 exists or not
+#yes,  link it over
+    volume_top_dir=os.environ.get('CVM_VOLUME_TOP_DIR')
+    if volume_top_dir != None :
+        dpath=volume_top_dir+"/"+mdir
+        if os.path.isdir(dpath) :
+            subprocess.check_call(["ln", "-s", dpath, "."])
+            print("\nLinked!")
+            return;
 
-    fname=mdir+"/density.tar.gz"
-    url = path + "/" + fname
-    download_urlfile(url,fname)
-    subprocess.check_call(["tar", "-zxvf", fname])
+#no, then download only if needs too.
+    if not os.path.isdir(mdir) :
+        subprocess.check_call(["mkdir", "-p", mdir])
 
-    fname=mdir+"/vp.tar.gz"
-    url = path + "/" + fname
-    download_urlfile(url,fname)
-    subprocess.check_call(["tar", "-zxvf", fname])
+    fname=mdir+"/density.dat"
+    tarfile=mdir+"/density.tar.gz"
+    if not os.path.isfile(fname) :
+      print("download ", tarfile)
+      url = path + "/" + tarfile 
+      download_urlfile(url,tarfile)
+      subprocess.check_call(["tar", "-zxvf", tarfile])
 
-    fname=mdir+"/vs.tar.gz"
-    url = path + "/" + fname
-    download_urlfile(url,fname)
-    subprocess.check_call(["tar", "-zxvf", fname])
+    fname=mdir+"/vp.dat"
+    tarfile=mdir+"/vp.tar.gz"
+    if not os.path.isfile(fname) :
+      print("download ", tarfile)
+      url = path + "/" + tarfile
+      download_urlfile(url,tarfile)
+      subprocess.check_call(["tar", "-zxvf", tarfile])
+
+    fname=mdir+"/vs.dat"
+    tarfile=mdir+"/vs.tar.gz"
+    if not os.path.isfile(fname) :
+      print("download ", tarfile)
+      url = path + "/" + tarfile
+      download_urlfile(url,tarfile)
+      subprocess.check_call(["tar", "-zxvf", tarfile])
 
     print("\nDone!")
 
