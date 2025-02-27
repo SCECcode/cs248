@@ -34,7 +34,7 @@ if WITH_CS248_LARGEDATA_DIR
 else
 	if [ ! -d "${prefix}/data/cs248" ]; then \
 		$(MKDIR_P) ${prefix}/data; \
-		mv cvmh ${prefix}/data; \
+		mv cs248 ${prefix}/data; \
 		$(LN_S) -f ${prefix}/data/cs248 .; \
 	fi
 endif
