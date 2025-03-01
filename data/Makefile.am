@@ -28,15 +28,16 @@ if WITH_CS248_LARGEDATA_DIR
 	if [ ! -d "${prefix}/data/cs248" ]; then \
 		$(MKDIR_P) ${prefix}/data; \
 		$(LN_S) -f $(CS248_LARGEDATA_DIR) ${prefix}/data/cs248; \
-		cp config ${prefix}/data; \
 		echo "USING WITH_CS248_LARGEDATA_DIR in cs248"; \
 	fi
+	cp config ${prefix}/data
 else
 	if [ ! -d "${prefix}/data/cs248" ]; then \
 		$(MKDIR_P) ${prefix}/data; \
 		mv cs248 ${prefix}/data; \
 		$(LN_S) -f ${prefix}/data/cs248 .; \
 	fi
+	cp config ${prefix}/data
 endif
 
 clean:
