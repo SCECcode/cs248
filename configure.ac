@@ -201,7 +201,11 @@ if test x"$CVM_LARGEDATA_DIR" != x; then
    # test directory existence
    CS248_LARGEDATA_DIR=$CVM_LARGEDATA_DIR/model/cs248
 # In docker container building.. this is not accessible  yet ???
-   AC_CHECK_FILE($CS248_LARGEDATA_DIR/vp.dat,
+   if test x"$CVM_IN_DOCKER" != x; then
+     AM_CONDITIONAL([WITH_CS248_LARGEDATA_DIR], true)
+     AC_SUBST(CS248_LARGEDATA_DIR)
+   else 
+     AC_CHECK_FILE($CS248_LARGEDATA_DIR/vp.dat,
                 [AM_CONDITIONAL([WITH_CS248_LARGEDATA_DIR], true) AC_SUBST(CS248_LARGEDATA_DIR)],
                 [AM_CONDITIONAL(WITH_CS248_LARGEDATA_DIR, false)])
 else
