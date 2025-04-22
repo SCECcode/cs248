@@ -1,5 +1,7 @@
 # CS248 
 
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 CS248 is the velocity model used for CyberShake Study 24.8 in Northern 
 California. It was constructed by tiling together the USGS SFCVM v21.1,
 CCA-06, and a 1D velocity model derived from the Sierra region of the 
