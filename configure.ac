@@ -200,10 +200,10 @@ AC_SUBST(PROJ_LDFLAGS)
 if test x"$CVM_LARGEDATA_DIR" != x; then
    # test directory existence
    CS248_LARGEDATA_DIR=$CVM_LARGEDATA_DIR/model/cs248
-# In docker container building.. this is not accessible  yet
-#   AC_CHECK_FILE($CVM_LARGEDATA_DIR/model/cs248/vp.dat, [], [AC_MSG_ERROR(["CS248 data not found in cvm_largedata_dir"])])
-   AM_CONDITIONAL([WITH_CS248_LARGEDATA_DIR], true)
-   AC_SUBST(CS248_LARGEDATA_DIR)
+# In docker container building.. this is not accessible  yet ???
+   AC_CHECK_FILE($CS248_LARGEDATA_DIR/vp.dat,
+                [AM_CONDITIONAL([WITH_CS248_LARGEDATA_DIR], true) AC_SUBST(CS248_LARGEDATA_DIR)],
+                [AM_CONDITIONAL(WITH_CS248_LARGEDATA_DIR, false)])
 else
    AM_CONDITIONAL(WITH_CS248_LARGEDATA_DIR, false)
 fi
