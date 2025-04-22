@@ -11,7 +11,7 @@ capped at 4, and the surface point was populated at a depth of 20m.
 ## Installation
 
 This package is intended to be installed as part of the UCVM framework,
-version 25.6 or higher. While it is possible to link to this library
+version 25.x or higher. While it is possible to link to this library
 using your own C or Fortran code, we recommend using the UCVM suite of
 utilities. Most common functions, such as mesh generation and query 
 capabilities, are already in there.
