@@ -4,7 +4,6 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/sceccode/cs248)
 [![cs248-ucvm-ci Actions Status](https://github.com/SCECcode/cs248/workflows/cs248-ucvm-ci/badge.svg)](https://github.com/SCECcode/cs248/actions)
 
-
 CS248 is the velocity model used for CyberShake Study 24.8 in Northern 
 California. It was constructed by tiling together the USGS SFCVM v21.1,
 CCA-06, and a 1D velocity model derived from the Sierra region of the 
