@@ -1,0 +1,73 @@
+name: cs248-ucvm-ci
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  cs248-build-ucvm-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+    steps:
+    - name: set UCVM_SRC_PATH 
+      run: echo "UCVM_SRC_PATH=$RUNNER_WORKSPACE/cs248/ucvm" >> $GITHUB_ENV
+    - name: set UCVM_INSTALL_PATH 
+      run: echo "UCVM_INSTALL_PATH=$RUNNER_WORKSPACE/cs248/target" >> $GITHUB_ENV
+### build ucvm(main) first 
+    - id: get-ucvm 
+      uses: actions/checkout@v2
+      with: 
+        repository: 'SCECcode/UCVM'
+        ref: testMei
+        path: ucvm
+    - id: build-ucvm
+      uses: ./ucvm/.github/actions/build-ucvm-action
+      with:
+         initiating-repo: 'cs248'
+         target-model: 'cs248'
+#   - name: Start SSH via Ngrok
+#     if: ${{ failure() }}
+#     uses: luchihoratiu/debug-via-ssh@main
+#     with:
+#           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_TOKEN }}
+#           NGROK_TIMEOUT: 3000
+#           SSH_PASS: ${{ secrets.NGROK_SECRET }}
+    - id: get-result
+      run: more ${{ steps.build-ucvm.outputs.build-log }}
+      shell: bash
+    - name: move stock cs248 away
+      run: (rm -rf $RUNNER_WORKSPACE/cs248/ucvm/work/model/cs248)
+      shell: bash
+### build cs248 from github 
+    - name: checkout cs248 main
+      uses: actions/checkout@v2
+      with: 
+        path: cs248
+    - name: move it to the right location
+      run: (mv cs248 $RUNNER_WORKSPACE/cs248/ucvm/work/model; pwd; ls)
+      shell: bash
+    - name: build cs248 as part of ucvm 
+      run: (cd $RUNNER_WORKSPACE/cs248/ucvm/work/model/cs248; ./.github/scripts/cs248-build.sh)
+      shell: bash
+### check ucvm is still valid
+    - name: check on ucvm
+      run: (source $UCVM_INSTALL_PATH/conf/ucvm_env.sh; ucvm_query -H)
+      shell: bash
+    - name: test cs248 with ucvm
+      run: (cd $RUNNER_WORKSPACE/cs248/ucvm/work/model/cs248; source $UCVM_INSTALL_PATH/conf/ucvm_env.sh; ./.github/scripts/cs248-test-ucvm.sh)
+      shell: bash
+#    - name: Start SSH via Ngrok
+#      if: ${{ success() }}
+#      uses: luchihoratiu/debug-via-ssh@main
+#      with:
+#            NGROK_AUTH_TOKEN: ${{ secrets.NGROK_TOKEN }}
+#            NGROK_TIMEOUT: 3000
+#            SSH_PASS: ${{ secrets.NGROK_SECRET }}
+    - name: test cs248 under ucvm
+      run: (cd $RUNNER_WORKSPACE/cs248/ucvm; source $UCVM_INSTALL_PATH/conf/ucvm_env.sh; ./.github/scripts/ucvm-test.sh)
+      shell: bash
+
+
+

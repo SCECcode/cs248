@@ -1,6 +1,9 @@
 # CS248 
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+![GitHub repo size](https://img.shields.io/github/repo-size/sceccode/cs248)
+[![cs248-ucvm-ci Actions Status](https://github.com/SCECcode/cs248/workflows/cs248-ucvm-ci/badge.svg)](https://github.com/SCECcode/cs248/actions)
+
 
 CS248 is the velocity model used for CyberShake Study 24.8 in Northern 
 California. It was constructed by tiling together the USGS SFCVM v21.1,
@@ -13,10 +16,7 @@ capped at 4, and the surface point was populated at a depth of 20m.
 ## Installation
 
 This package is intended to be installed as part of the UCVM framework,
-version 25.x or higher. While it is possible to link to this library
-using your own C or Fortran code, we recommend using the UCVM suite of
-utilities. Most common functions, such as mesh generation and query 
-capabilities, are already in there.
+version 25.x or higher. 
 
 ## Library
 
