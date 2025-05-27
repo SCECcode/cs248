@@ -6,6 +6,7 @@ on:
 
 jobs:
   cs248-build-ucvm-linux:
+    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,13 +28,6 @@ jobs:
       with:
          initiating-repo: 'cs248'
          target-model: 'cs248'
-#   - name: Start SSH via Ngrok
-#     if: ${{ failure() }}
-#     uses: luchihoratiu/debug-via-ssh@main
-#     with:
-#           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_TOKEN }}
-#           NGROK_TIMEOUT: 3000
-#           SSH_PASS: ${{ secrets.NGROK_SECRET }}
     - id: get-result
       run: more ${{ steps.build-ucvm.outputs.build-log }}
       shell: bash

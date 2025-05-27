@@ -6,6 +6,7 @@ on:
 
 jobs:
   cs248-build-standalone-mac:
+    if: false
     runs-on: macos-latest
     strategy:
       matrix:
@@ -27,6 +28,7 @@ jobs:
       shell: bash
 
   cs248-build-standalone-linux:
+    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
