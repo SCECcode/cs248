@@ -2,7 +2,7 @@ name: cs248-ucvm-ci
 
 on:
   push:
-    branches: [ foo ]
+    branches: [ foofoo ]
 
 jobs:
   cs248-build-ucvm-linux:
