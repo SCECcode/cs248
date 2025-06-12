@@ -12,6 +12,7 @@ else
 DENSITY_FILE=cs248/density.dat
 VS_FILE=cs248/vs.dat
 VP_FILE=cs248/vp.dat
+	echo "NOT USING WITH_CS248_LARGEDATA_DIR in cs248"
 	if [ ! -f "$(DENSITY_FILE)" ]; then \
 		./make_data_files.py; \
 	fi 
@@ -36,6 +37,7 @@ else
 		$(MKDIR_P) ${prefix}/data; \
 		mv cs248 ${prefix}/data; \
 		$(LN_S) -f ${prefix}/data/cs248 .; \
+		echo "NOT USING WITH_CS248_LARGEDATA_DIR in cs248"; \
 	fi
 	cp config ${prefix}/data
 endif
