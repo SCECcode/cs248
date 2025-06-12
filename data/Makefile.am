@@ -9,17 +9,8 @@ all:
 if WITH_CS248_LARGEDATA_DIR
 	echo "USING WITH_CS248_LARGEDATA_DIR in cs248"
 else
-DENSITY_FILE=cs248/density.dat
-VS_FILE=cs248/vs.dat
-VP_FILE=cs248/vp.dat
 	echo "NOT USING WITH_CS248_LARGEDATA_DIR in cs248"
-	if [ ! -f "$(DENSITY_FILE)" ]; then \
-		./make_data_files.py; \
-	fi 
-	if [ ! -f "$(VS_FILE)" ]; then \
-		./make_data_files.py; \
-	fi 
-	if [ ! -f "$(VP_FILE)" ]; then \
+	if [ ! -d "cs248" ]; then \
 		./make_data_files.py; \
 	fi 
 endif
